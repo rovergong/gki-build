@@ -11,27 +11,31 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
+      # 固定最新6.12 GKI SHA1
       KERNEL_COMMIT: 6c9833506661b564ae3bedd6378ff80a3718e256
-      RELEASE_TAG: kernel-archive-release
+      RELEASE_TAG: gki-6.12-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install aria2
-        run: sudo apt-get update && sudo apt-get install -y aria2
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y aria2 gh
 
-      - name: Download and Upload Kernel
+      - name: Download GKI Kernel Source
         run: |
-          # 正确的 Google Source 内核下载地址
-          KERNEL_URL="https://android.googource.com/kernel/common/+archive/${{ env.KERNEL_COMMIT }}.tar.gz"
-          KERNEL_FILE="common-${{ env.KERNEL_COMMIT }}.tar.gz"
+          KERNEL_URL="https://android.googlesource.com/kernel/common/+archive/${{ env.KERNEL_COMMIT }}.tar.gz"
+          KERNEL_FILE="gki-6.12-${{ env.KERNEL_COMMIT }}.tar.gz"
           
-          echo "Downloading kernel commit: ${{ env.KERNEL_COMMIT }}"
-          aria2c -s16 -x16 -k1M "$KERNEL_URL" -o "$KERNEL_FILE"
+          echo "Start download commit: ${{ env.KERNEL_COMMIT }}"
+          aria2c -s16 -x16 -k1M --file-allocation=none "$KERNEL_URL" -o "$KERNEL_FILE"
           
-          echo "Checking/Creating release: ${{ env.RELEASE_TAG }}"
-          gh release view "${{ env.RELEASE_TAG }}" &>/dev/null || \
-            gh release create "${{ env.RELEASE_TAG }}" --title "Kernel Archive ${{ env.KERNEL_COMMIT }}" --notes "Automated upload of kernel source archive."
+          ls -lh "$KERNEL_FILE"
+
+      - name: Create & Upload Release
+        run: |
+          gh release view ${{ env.RELEASE_TAG }} &>/dev/null || \
+          gh release create ${{ env.RELEASE_TAG }} \
+            --title "GKI 6.12 Latest Source Archive" \
+            --notes "Auto upload android16-6.12-2026-03_r30 source code\nCommit: ${{ env.KERNEL_COMMIT }}"
           
-          echo "Uploading $KERNEL_FILE"
-          gh release upload "${{ env.RELEASE_TAG }}" "$KERNEL_FILE" --clobber
+          gh release upload ${{ env.RELEASE_TAG }} gki-6.12-${{ env.KERNEL_COMMIT }}.tar.gz --clobber
