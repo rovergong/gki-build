@@ -23,11 +23,11 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y aria2
 
       - name: Download and Upload Kernel
-        run: |
-          # KERNEL_URL="https://android.googlesource.com/kernel/common/+archive/${{ env.KERNEL_COMMIT }}.tar.gz"
-          KERNEL_URL="https://android.googlesource.com/kernel/common/+/refs/tags/${{ env.KERNEL_COMMIT }}tar.gz"
-          KERNEL_FILE="common-${{ env.KERNEL_COMMIT }}"
-          
+      run: |
+        # 正确的 Google Source 内核下载地址（唯一能用的格式）
+         KERNEL_URL="https://android.googlesource.com/kernel/common/+archive/${{ env.KERNEL_COMMIT }}.tar.gz"
+         KERNEL_FILE="common-${{ env.KERNEL_COMMIT }}.tar.gz"
+    
           echo "Downloading kernel commit: ${{ env.KERNEL_COMMIT }}"
           aria2c -s16 -x16 -k1M "$KERNEL_URL" -o "$KERNEL_FILE"
           
