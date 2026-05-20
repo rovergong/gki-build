@@ -23,7 +23,7 @@ jobs:
 
       - name: Download and Upload Kernel
         run: |
-        # KERNEL_URL="https://android.googlesource.com/kernel/common/+archive/${{ env.KERNEL_COMMIT }}.tar.gz"
+          # KERNEL_URL="https://android.googlesource.com/kernel/common/+archive/${{ env.KERNEL_COMMIT }}.tar.gz"
           KERNEL_URL="https://android.googlesource.com/kernel/common/+/refs/${{ env.KERNEL_COMMIT }}.tar.gz"
           KERNEL_FILE="common-${{ env.KERNEL_COMMIT }}.tar.gz"
           
