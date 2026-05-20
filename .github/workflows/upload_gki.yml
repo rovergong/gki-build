@@ -12,7 +12,8 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       # 定义固定的资源信息
-      KERNEL_COMMIT: 85a3b1c62eafe7162de570b1b5629a6bb654010d
+      #KERNEL_COMMIT: 85a3b1c62eafe7162de570b1b5629a6bb654010d
+      KERNEL_COMMIT: 6c9833506661b564ae3bedd6378ff80a3718e256
       RELEASE_TAG: kernel-archive-release
     steps:
       - name: Checkout repository
