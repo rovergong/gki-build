@@ -11,8 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
-      # 定义固定的资源信息
-      #KERNEL_COMMIT: 85a3b1c62eafe7162de570b1b5629a6bb654010d
       KERNEL_COMMIT: 6c9833506661b564ae3bedd6378ff80a3718e256
       RELEASE_TAG: kernel-archive-release
     steps:
@@ -23,16 +21,15 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y aria2
 
       - name: Download and Upload Kernel
-      run: |
-        # 正确的 Google Source 内核下载地址（唯一能用的格式）
-         KERNEL_URL="https://android.googlesource.com/kernel/common/+archive/${{ env.KERNEL_COMMIT }}.tar.gz"
-         KERNEL_FILE="common-${{ env.KERNEL_COMMIT }}.tar.gz"
-    
+        run: |
+          # 正确的 Google Source 内核下载地址
+          KERNEL_URL="https://android.googource.com/kernel/common/+archive/${{ env.KERNEL_COMMIT }}.tar.gz"
+          KERNEL_FILE="common-${{ env.KERNEL_COMMIT }}.tar.gz"
+          
           echo "Downloading kernel commit: ${{ env.KERNEL_COMMIT }}"
           aria2c -s16 -x16 -k1M "$KERNEL_URL" -o "$KERNEL_FILE"
           
           echo "Checking/Creating release: ${{ env.RELEASE_TAG }}"
-          # 如果 Release 不存在则创建，存在则忽略错误
           gh release view "${{ env.RELEASE_TAG }}" &>/dev/null || \
             gh release create "${{ env.RELEASE_TAG }}" --title "Kernel Archive ${{ env.KERNEL_COMMIT }}" --notes "Automated upload of kernel source archive."
           
