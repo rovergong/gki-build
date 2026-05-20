@@ -24,8 +24,8 @@ jobs:
       - name: Download and Upload Kernel
         run: |
           # KERNEL_URL="https://android.googlesource.com/kernel/common/+archive/${{ env.KERNEL_COMMIT }}.tar.gz"
-          KERNEL_URL="https://android.googlesource.com/kernel/common/+/refs/${{ env.KERNEL_COMMIT }}.tar.gz"
-          KERNEL_FILE="common-${{ env.KERNEL_COMMIT }}.tar.gz"
+          KERNEL_URL="https://android.googlesource.com/kernel/common/+/refs/tags/${{ env.KERNEL_COMMIT }}tar.gz"
+          KERNEL_FILE="common-${{ env.KERNEL_COMMIT }}"
           
           echo "Downloading kernel commit: ${{ env.KERNEL_COMMIT }}"
           aria2c -s16 -x16 -k1M "$KERNEL_URL" -o "$KERNEL_FILE"
