@@ -12,7 +12,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       # 固定最新6.12 GKI SHA1
-      KERNEL_COMMIT: 6c9833506661b564ae3bedd6378ff80a3718e256
+      KERNEL_COMMIT: f01d585ebe1567ed9d53f4de4d703a481dd9e199
       RELEASE_TAG: gki-6.12-latest
     steps:
       - name: Checkout repository
@@ -36,6 +36,6 @@ jobs:
           gh release view ${{ env.RELEASE_TAG }} &>/dev/null || \
           gh release create ${{ env.RELEASE_TAG }} \
             --title "GKI 6.12 Latest Source Archive" \
-            --notes "Auto upload android16-6.12-2026-03_r30 source code\nCommit: ${{ env.KERNEL_COMMIT }}"
+            --notes "Auto upload android16-6.12-2025-06_r58 source code\nCommit: ${{ env.KERNEL_COMMIT }}"
           
           gh release upload ${{ env.RELEASE_TAG }} gki-6.12-${{ env.KERNEL_COMMIT }}.tar.gz --clobber
